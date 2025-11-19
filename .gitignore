@@ -1,0 +1,31 @@
+.venv/
+__pycache__/
+*.pyc
+
+# Data & models (large files — tracked by DVC)
+data/
+dataset.csv
+reddit_preprocessing.csv
+lgbm_model.pkl
+tfidf_vectorizer.pkl
+
+# MLflow local runs (remote is on DagsHub)
+mlruns/
+mlflow_export/
+
+# Logs & generated artifacts
+*.log
+confusion_matrix_Test Data.png
+experiment_info.json
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Python package build
+yt_insights.egg-info/
+
+# macOS
+.DS_Store
+
+# Utility scripts
+sync_mlflow_local.py

@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  backend:
+    image: ${ECR_IMAGE:-yt_insights_backend:latest}   # ECR image on EC2, local build otherwise
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    container_name: yt_insights_backend
+    environment:
+      - PYTHONUNBUFFERED=1

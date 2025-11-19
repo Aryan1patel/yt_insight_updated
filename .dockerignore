@@ -1,0 +1,24 @@
+.venv
+.git
+.dvc
+.dvcignore
+__pycache__
+*.pyc
+data/
+notebooks/
+*.log
+yt-chrome-plugin-frontend/
+yt_insights.egg-info/
+experiment_info.json
+errors.log
+model_building_errors.log
+model_evaluation_errors.log
+model_registration_errors.log
+preprocessing_errors.log
+dataset.csv
+reddit_preprocessing.csv
+confusion_matrix_Test Data.png
+dvc.yaml
+params.yaml
+src/
+setup.py
