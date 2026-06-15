@@ -6,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 import io
+import os
+import urllib.request
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import numpy as np
@@ -15,6 +17,37 @@ import pickle
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import matplotlib.dates as mdates
+
+MODEL_URL = "https://github.com/Aryan1patel/yt_insight_updated/releases/download/v1.0.0/lgbm_model.pkl"
+VECTORIZER_URL = "https://github.com/Aryan1patel/yt_insight_updated/releases/download/v1.0.0/tfidf_vectorizer.pkl"
+
+MODEL_PATH = "./lgbm_model.pkl"
+VECTORIZER_PATH = "./tfidf_vectorizer.pkl"
+
+def download_model_if_needed():
+    """Download model files from GitHub Releases if they don't exist locally"""
+    
+    if not os.path.exists(MODEL_PATH):
+        print(f"📥 Downloading model file from {MODEL_URL}...")
+        try:
+            urllib.request.urlretrieve(MODEL_URL, MODEL_PATH)
+            print("✅ Model downloaded successfully!")
+        except Exception as e:
+            print(f"❌ Error downloading model: {e}")
+            raise
+    else:
+        print("✅ Model file already exists locally")
+    
+    if not os.path.exists(VECTORIZER_PATH):
+        print(f"📥 Downloading vectorizer file from {VECTORIZER_URL}...")
+        try:
+            urllib.request.urlretrieve(VECTORIZER_URL, VECTORIZER_PATH)
+            print("✅ Vectorizer downloaded successfully!")
+        except Exception as e:
+            print(f"❌ Error downloading vectorizer: {e}")
+            raise
+    else:
+        print("✅ Vectorizer file already exists locally")
 
 app = FastAPI()
 
@@ -63,32 +96,6 @@ class TrendRequest(BaseModel):
 stop_words = set(stopwords.words("english")) - {"not", "but", "however", "no", "yet"}
 lemmatizer = WordNetLemmatizer()
 
-# def preprocess_comment(comment):
-    # try:
-    #     comment = comment.lower().strip()
-    #     comment = re.sub(r"\n", " ", comment)
-    #     comment = re.sub(r"[^A-Za-z0-9\s!?.,]", "", comment)
-
-    #     stop_words = set(stopwords.words("english")) - {
-    #         "not", "but", "however", "no", "yet"
-    #     }
-
-    #     comment = " ".join(
-    #         [word for word in comment.split() if word not in stop_words]
-    #     )
-
-    #     lemmatizer = WordNetLemmatizer()
-
-    #     comment = " ".join(
-    #         [lemmatizer.lemmatize(word) for word in comment.split()]
-    #     )
-
-    #     return comment
-
-    # except Exception as e:
-    #     print(e)
-    #     return comment
-
 def preprocess_comment(comment):
     try:
         comment = comment.lower().strip()
@@ -124,10 +131,13 @@ def load_model(model_path, vectorizer_path):
     return model, vectorizer
 
 
-model, vectorizer = load_model(
-    "./lgbm_model.pkl",
-    "./tfidf_vectorizer.pkl"
-)
+# Download models on startup if needed
+print("🚀 Starting application...")
+download_model_if_needed()
+
+# Load the models
+model, vectorizer = load_model(MODEL_PATH, VECTORIZER_PATH)
+print("✅ Models loaded successfully!")
 
 # -----------------------------
 # Routes
@@ -152,11 +162,6 @@ def predict(data: CommentsRequest):
 
     try:
         preprocessed = [preprocess_comment(c) for c in comments]
-
-        # transformed = vectorizer.transform(preprocessed)
-        # dense = transformed.toarray()
-
-        # predictions = model.predict(dense).tolist()
 
         transformed = vectorizer.transform(preprocessed)
         predictions = model.predict(transformed).tolist()
@@ -184,11 +189,6 @@ def predict_with_timestamps(data: TimestampRequest):
 
     try:
         preprocessed = [preprocess_comment(c) for c in comments]
-
-        # transformed = vectorizer.transform(preprocessed)
-        # dense = transformed.toarray()
-
-        # predictions = model.predict(dense).tolist()
 
         transformed = vectorizer.transform(preprocessed)
         predictions = model.predict(transformed).tolist()
