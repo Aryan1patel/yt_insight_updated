@@ -15,6 +15,8 @@
 
 ## 📺 Project Overivew
 
+## Download the extension https://drive.google.com/file/d/1Uy5_ZsBGdkjPV_knWrl4mt_p5b6tI2ND/view?usp=sharing
+
 
 > [!TIP]
 > **YTintel** doesn't just predict sentiment; it provides high-level insights like **Sentiment Trends Over Time**, **Word Clouds**, and **User Engagement Metrics** directly in your browser.
