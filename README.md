@@ -17,6 +17,8 @@
 
 ## Download the extension https://drive.google.com/file/d/1Uy5_ZsBGdkjPV_knWrl4mt_p5b6tI2ND/view?usp=sharing
 
+see how to use extension in chrome : [youtube](https://youtu.be/oswjtLwCUqg?si=v5Filt7BXjvzxZb2)
+
 
 > [!TIP]
 > **YTintel** doesn't just predict sentiment; it provides high-level insights like **Sentiment Trends Over Time**, **Word Clouds**, and **User Engagement Metrics** directly in your browser.
